@@ -20,7 +20,7 @@ import { Todo } from '../models/todo';
         >
           {{ todo.description }}
         </p>
-        <button class="contrast outline todo-item--delete-button">&Chi;</button>
+        <button class="contrast outline todo-item--delete-button">X</button>
       </li>
     </ng-container>
   `,

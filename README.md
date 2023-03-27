@@ -72,7 +72,17 @@ In this step we scaffolded the three versions of the app.
    - Scaffold brand new Angular app using angular CLI.
    - Convert module based app to standalone app.
    - Import html into app component template.
-   - Add script reference to Pico to index head tag. 
+   - Add script reference to Pico to index head tag.
+
+## `step-1` - Display Todo List
+
+To begin with we'll display a static list of TODOs for each version of the app.
+
+### Vanilla
+
+### React
+
+### Angular
 
 ## Resources
 

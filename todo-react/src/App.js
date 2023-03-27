@@ -1,4 +1,19 @@
+import TodoList from "./components/TodoList";
+
 function App() {
+  const todos = [
+    {
+      id: crypto.randomUUID(),
+      description: "Active item",
+      done: false,
+    },
+    {
+      id: crypto.randomUUID(),
+      description: "Completed item",
+      done: true,
+    },
+  ];
+
   return (
     <>
       <header className="container">
@@ -15,26 +30,7 @@ function App() {
             placeholder="What has to be done?"
           />
         </section>
-        <section>
-          <ul className="todo-list">
-            <li className="todo-item">
-              <input type="checkbox" className="todo-item--checkbox" />
-              <p className="todo-item--text">Active item</p>
-              <button className="contrast outline todo-item--delete-button">
-                &Chi;
-              </button>
-            </li>
-            <li className="todo-item">
-              <input checked type="checkbox" className="todo-item--checkbox" />
-              <p className="todo-item--text todo-item--text__done">
-                Completed item
-              </p>
-              <button className="contrast outline todo-item--delete-button">
-                &Chi;
-              </button>
-            </li>
-          </ul>
-        </section>
+        <TodoList todos={todos} />
         <section className="grid">
           <button className="primary">All</button>
           <button className="secondary outline">Active</button>
