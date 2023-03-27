@@ -49,8 +49,9 @@ As we dive into implementing the app, we'll work in a series of Git branches tha
 
 // all fields are required
 const todo = {
-    description: "Lead SPA L&L",            // string
-    done: true,                             // boolean
+    id: 'b851c940-cc3c-42de-8bd2-8ac63e0bef24'  // string
+    description: "Buy milk",                    // string
+    done: false,                                // boolean
 }
 
 ```
