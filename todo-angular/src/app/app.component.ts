@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
+import { TodoListComponent } from './components/todo-list.component';
+import { Todo } from './models/todo';
 
 @Component({
   selector: 'app-root',
   standalone: true,
+  imports: [TodoListComponent],
   template: `
     <header class="container">
       <h1>SPA Lunch &amp; Learn - 3/30/2023</h1>
@@ -18,24 +21,7 @@ import { Component } from '@angular/core';
           placeholder="What has to be done?"
         />
       </section>
-      <section>
-        <ul class="todo-list">
-          <li class="todo-item">
-            <input type="checkbox" class="todo-item--checkbox" />
-            <p class="todo-item--text">Active item</p>
-            <button class="contrast outline todo-item--delete-button">
-              &Chi;
-            </button>
-          </li>
-          <li class="todo-item">
-            <input checked type="checkbox" class="todo-item--checkbox" />
-            <p class="todo-item--text todo-item--text__done">Completed item</p>
-            <button class="contrast outline todo-item--delete-button">
-              &Chi;
-            </button>
-          </li>
-        </ul>
-      </section>
+      <app-todo-list [todos]="todos"/>
       <section class="grid">
         <button class="primary">All</button>
         <button class="secondary outline">Active</button>
@@ -44,4 +30,17 @@ import { Component } from '@angular/core';
     </main>
   `,
 })
-export class AppComponent {}
+export class AppComponent {
+  todos: Todo[] = [
+    {
+      id: crypto.randomUUID(),
+      description: 'Active todo',
+      done: false,
+    },
+    {
+      id: crypto.randomUUID(),
+      description: 'Completed todo',
+      done: true,
+    },
+  ];
+}
