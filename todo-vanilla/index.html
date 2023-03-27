@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SPA L&amp;L</title>
+
+    <!-- Pico.css -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <header class="container">
+      <h1>SPA Lunch &amp; Learn - 3/30/2023</h1>
+    </header>
+
+    <main class="container">
+      <section>
+        <input
+          class="todo-form"
+          type="text"
+          name="todoInput"
+          id="todoInput"
+          placeholder="What has to be done?"
+        />
+      </section>
+      <section>
+        <ul class="todo-list">
+          <li class="todo-item">
+            <input type="checkbox" class="todo-item--checkbox" />
+            <p class="todo-item--text">Active item</p>
+            <button class="contrast outline todo-item--delete-button">
+              &Chi;
+            </button>
+          </li>
+          <li class="todo-item">
+            <input checked type="checkbox" class="todo-item--checkbox" />
+            <p class="todo-item--text todo-item--text__done">Completed item</p>
+            <button class="contrast outline todo-item--delete-button">
+              &Chi;
+            </button>
+          </li>
+        </ul>
+      </section>
+      <section class="grid">
+        <button class="primary">All</button>
+        <button class="secondary outline">Active</button>
+        <button class="secondary outline">Completed</button>
+      </section>
+    </main>
+
+    <script src="index.js"></script>
+  </body>
+</html>
