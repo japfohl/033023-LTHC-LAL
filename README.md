@@ -56,6 +56,24 @@ const todo = {
 
 ```
 
+## Steps
+
+##  `step-0` - Scaffold
+
+In this step we scaffolded the three versions of the app.
+1. Vanilla App - Copied static template and created separate CSS and JS files for styles and behavior.  Add script reference for JS file at bottom of body.
+2. React App:
+   - Scaffolded brand new app using create react app.
+   - Got rid of all react boilerplate styles, layout, and example app.
+   - Replace return value of app with the static app.
+   - Import Pico CSS in index.
+   - Replace all `class` attributes with `className` per React standards.
+3. Angular App:
+   - Scaffold brand new Angular app using angular CLI.
+   - Convert module based app to standalone app.
+   - Import html into app component template.
+   - Add script reference to Pico to index head tag. 
+
 ## Resources
 
 * https://developer.mozilla.org/en-US/
