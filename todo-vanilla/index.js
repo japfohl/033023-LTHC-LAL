@@ -43,21 +43,14 @@ function createTodo(todo) {
   return li;
 }
 
-function clearTodoList() {
+function renderTodos() {
   const list = getTodoList();
 
   for (let node of list.childNodes) {
     list.removeChild(node);
   }
-}
 
-function addTodos() {
-  getTodoList().append(...todos.map(createTodo));
-}
-
-function renderTodos() {
-  clearTodoList();
-  addTodos();
+  list.append(...todos.map(createTodo));
 }
 
 function main() {

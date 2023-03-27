@@ -34,11 +34,10 @@ As we dive into implementing the app, we'll work in a series of Git branches tha
 ## Example App Requirements
 
 1. App should display a list of TODOs
-2. The user should be able to enter a new TODO, press enter, and have it added to the end of the list.
-3. App should display todos in the order they are added.
-4. App should allow the user to toggle the status of a TODO (done / undone).
-5. App Should allow the user to delete a TODO from the list.
-6. App should allow the user to select their "view" of the TODOs:
+2. The user should be able to enter a new TODO, press enter, and have it added to the end of the list as Active.
+3. App should allow the user to toggle the status of a TODO (done / undone).
+4. App Should allow the user to delete a TODO from the list.
+5. App should allow the user to select their "view" of the TODOs:
     - View All: Display all TODOs. (default view).
     - Incomplete Only: Only show incomplete TODOs
     - Completed Only: Only show completed TODOs.
@@ -76,7 +75,19 @@ In this step we scaffolded the three versions of the app.
 
 ## `step-1` - Display Todo List
 
-To begin with we'll display a static list of TODOs for each version of the app.
+To begin with we'll dynamically render a static list of TODOs in each app.
+
+For both the Angular and the React apps, this means creating two new components:
+1. Todo List Component
+    - Takes in a list of Todos and renders then in a list.
+    - Rendering of the actual Todo item itself is handled by the Todo Item Component.
+2. Todo Item Component
+    - Takes in a Todo item and renders the todo itself on the screen. 
+    - Dynamically sets the checkbox "checked" property and the "completed" styling on the text.
+
+In the vanilla version of the application, we have to fully remove the markup from the page and re-build it from scratch using the standard DOM API.  We then clear the view, and re-render using the newly generated list.
+
+One notable difference about the Angular applicaiton is the use of an injectable service.  The Angular style of doing this is to encapsulate logic wherever possible and so, moving behavior to the `TodoService` makes a great deal of sense.  Under normal circumstances I'd be inclined to leverage some reactive programming techniques but for this demo we'll strive for simplicity and clarity.
 
 ### Vanilla
 

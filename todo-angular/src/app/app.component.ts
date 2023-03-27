@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TodoListComponent } from './components/todo-list.component';
-import { Todo } from './models/todo';
+import { TodoService } from './services/todo.service';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +21,7 @@ import { Todo } from './models/todo';
           placeholder="What has to be done?"
         />
       </section>
-      <app-todo-list [todos]="todos"/>
+      <app-todo-list [todos]="todoService.todos"/>
       <section class="grid">
         <button class="primary">All</button>
         <button class="secondary outline">Active</button>
@@ -31,16 +31,5 @@ import { Todo } from './models/todo';
   `,
 })
 export class AppComponent {
-  todos: Todo[] = [
-    {
-      id: crypto.randomUUID(),
-      description: 'Active todo',
-      done: false,
-    },
-    {
-      id: crypto.randomUUID(),
-      description: 'Completed todo',
-      done: true,
-    },
-  ];
+  todoService = inject(TodoService);
 }
