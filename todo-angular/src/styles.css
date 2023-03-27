@@ -1,0 +1,44 @@
+section {
+  margin-bottom: 20px;
+}
+
+.container {
+  padding-block: 40px;
+}
+
+.todo-form {
+  box-shadow: var(--card-box-shadow);
+}
+
+.todo-list {
+  padding: 0;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  border: var(--border-width) solid var(--form-element-border-color);
+  border-radius: var(--border-radius);
+}
+
+.todo-item .todo-item--checkbox {
+  margin-inline: 20px;
+}
+
+.todo-item .todo-item--text {
+  flex: 1;
+  margin: 0;
+}
+
+.todo-item .todo-item--text__done {
+  text-decoration: line-through;
+}
+
+.todo-item .todo-item--delete-button {
+  flex: initial;
+  width: max-content;
+  color: crimson;
+  border: unset;
+  margin-bottom: 0;
+  font-weight: bold;
+}
