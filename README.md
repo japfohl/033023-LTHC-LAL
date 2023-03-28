@@ -88,13 +88,6 @@ For both the Angular and the React apps, this means creating two new components:
 In the vanilla version of the application, we have to fully remove the markup from the page and re-build it from scratch using the standard DOM API.  We then clear the view, and re-render using the newly generated list.
 
 One notable difference about the Angular applicaiton is the use of an injectable service.  The Angular style of doing this is to encapsulate logic wherever possible and so, moving behavior to the `TodoService` makes a great deal of sense.  Under normal circumstances I'd be inclined to leverage some reactive programming techniques but for this demo we'll strive for simplicity and clarity.
-
-### Vanilla
-
-### React
-
-### Angular
-
 ## Resources
 
 * https://developer.mozilla.org/en-US/
