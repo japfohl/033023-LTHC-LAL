@@ -7,6 +7,10 @@ section {
 }
 
 .todo-form {
+  margin-block-end: 0;
+}
+
+.todo-form--input {
   box-shadow: var(--card-box-shadow);
 }
 

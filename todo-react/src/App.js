@@ -1,7 +1,9 @@
 import TodoList from "./components/TodoList";
+import { useState } from "react";
+import TodoForm from "./components/TodoForm";
 
 function App() {
-  const todos = [
+  const [todos, setTodos] = useState([
     {
       id: crypto.randomUUID(),
       description: "Active item",
@@ -12,7 +14,17 @@ function App() {
       description: "Completed item",
       done: true,
     },
-  ];
+  ]);
+
+  const addTodo = (description) =>
+    setTodos([
+      ...todos,
+      {
+        id: crypto.randomUUID(),
+        description,
+        done: false,
+      },
+    ]);
 
   return (
     <>
@@ -21,15 +33,7 @@ function App() {
       </header>
 
       <main className="container">
-        <section>
-          <input
-            className="todo-form"
-            type="text"
-            name="todoInput"
-            id="todoInput"
-            placeholder="What has to be done?"
-          />
-        </section>
+        <TodoForm onSave={addTodo} />
         <TodoList todos={todos} />
         <section className="grid">
           <button className="primary">All</button>
