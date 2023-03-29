@@ -10,11 +10,17 @@ import { TodoComponent } from './todo-item.component';
   template: `
     <section>
       <ul class="todo-list">
-        <app-todo *ngFor="let todo of todos" [todo]="todo" />
+        <app-todo
+          *ngFor="let todo of todos; trackBy: trackTodo"
+          [todo]="todo" />
       </ul>
     </section>
   `,
 })
 export class TodoListComponent {
   @Input() todos: Todo[] = [];
+
+  trackTodo(_: number, todo: Todo): string {
+    return todo.id;
+  }
 }
