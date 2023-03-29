@@ -1,4 +1,4 @@
-const todos = [
+let todos = [
   {
     id: crypto.randomUUID(),
     description: "Active item",
@@ -15,6 +15,11 @@ function getTodoList() {
   return document.querySelector("#todo-list");
 }
 
+function toggleTodo(id, done) {
+  todos = todos.map((t) => (t.id === id ? { ...t, done } : t));
+  renderTodos();
+}
+
 function createTodo(todo) {
   // create the base list element
   const li = document.createElement("li");
@@ -26,6 +31,9 @@ function createTodo(todo) {
   input.type = "checkbox";
   input.classList.add("todo-item--checkbox");
   input.checked = todo.done;
+
+  // handle input toggles
+  input.addEventListener("change", () => toggleTodo(todo.id, !todo.done));
 
   // create the paragraph
   const p = document.createElement("p");
@@ -66,8 +74,8 @@ function initTodoForm() {
       done: false,
     });
 
+    document.querySelector('#todoInput').value = '';
     renderTodos();
-    event.target.value = "";
   });
 }
 
