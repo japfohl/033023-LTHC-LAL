@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Todo } from '../models/todo';
+import { Todo } from '../models/todo.model';
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
@@ -33,5 +33,11 @@ export class TodoService {
         done: false,
       },
     ];
+  }
+
+  setTodoStatus(id: string, done: boolean): void {
+    this._todos = this.todos.map((todo) =>
+      todo.id === id ? { ...todo, done } : todo
+    );
   }
 }

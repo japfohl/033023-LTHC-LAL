@@ -1,6 +1,6 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { Todo } from '../models/todo';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Todo, TodoChange } from '../models/todo.model';
 
 @Component({
   selector: 'app-todo',
@@ -13,6 +13,7 @@ import { Todo } from '../models/todo';
           [checked]="todo.done"
           type="checkbox"
           class="todo-item--checkbox"
+          (change)="toggleTodo.emit({ id: todo.id, done: !todo.done })"
         />
         <p
           class="todo-item--text"
@@ -27,4 +28,6 @@ import { Todo } from '../models/todo';
 })
 export class TodoComponent {
   @Input() todo?: Todo;
+
+  @Output() toggleTodo = new EventEmitter<TodoChange>();
 }

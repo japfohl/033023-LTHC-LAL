@@ -3,3 +3,5 @@ export interface Todo {
   description: string;
   done: boolean;
 }
+
+export type TodoChange = Pick<Todo, 'id' | 'done'>;
