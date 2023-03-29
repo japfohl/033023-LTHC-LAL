@@ -88,6 +88,38 @@ For both the Angular and the React apps, this means creating two new components:
 In the vanilla version of the application, we have to fully remove the markup from the page and re-build it from scratch using the standard DOM API.  We then clear the view, and re-render using the newly generated list.
 
 One notable difference about the Angular applicaiton is the use of an injectable service.  The Angular style of doing this is to encapsulate logic wherever possible and so, moving behavior to the `TodoService` makes a great deal of sense.  Under normal circumstances I'd be inclined to leverage some reactive programming techniques but for this demo we'll strive for simplicity and clarity.
+
+## `step-1` - Add Todo
+
+This step enables the user to add todos to the list.
+
+### Angular
+
+1. Created the `app-todo-form` component to encapsulate the logic of the input field and any validation requirements.
+   - Internally we're using a `FormControl` class from the `ReactiveFormsModule`.  This allows us to define all the business logic around the validation and behavior at the class level and keeps the template relativesly simple.
+   - The `FormControl` defines a form field that can't be null and is required. That field is bound to the input in the template.  Any time the form is submitted (which would happen by the user pressing enter), the `onSubmit` logic runs.  As long as the input field is valid (as defined by the validator functions on the form control), we emit the event and reset the field value. If the field isn't valid, we force validation to occur.
+   - In the case that the user doesn't submit, but we still want to show an error message before they press enter, we're relying on the `FormControl`'s invalid (the value doesn't conform to any of the validator functions passed to the control) and dirty (the value has been changed by the user) statuses.
+2. Updated the `app-root` component to handle the `addTodo` event.  The component accepts the emitted description and calls the (newly added) `addTodo` method on the `TodoService`.
+
+### React
+
+1. Created `TodoForm` component to encapsulate the logic of the input field and validation requirements.
+   - A native html `<form>` is being used to render the view here.  Built in validation attributes (`required`) are used to prevent invalid input.
+   - The actual value of the form is being kept in sync with a local state variable using the `useState` hook (provided by React).  Any time the value changes, we update the state value using the `setDescription` function and that value is then bound to the `value` property on the `input` element.
+   - When the user submits, we call the passed in `onSave` function with the value and reset the description to an empty string value using the hook's provided `setDescription` function.
+   - `useState` is a function that takes an initial state, and returns an array where the first index is the current state value (automatically updated between renders) and the second value is a setter function for that value.
+ - In the `App` component, we're passing the `addTodo` function into the `TodoForm`'s `onSave` prop.  That function get's called by the `TodoForm` and internally, take that value, create a new array with the current state value, appending the current result to the end of the array.
+
+### Vanilla
+
+The vanilla implementation is handled by the addition of the `initTodoForm` function in the `js` file.  This function does the following:
+- Stops the normal submit event and extracts the form input value.
+- Adds a new value to the global array.
+- rerenders the whole list
+- resets the input value
+
+A note on performance: One big disadvantage of the vanilla implementation is it is considerable less performant as the size of the list grows.  The vanilla implementation clears the list and re-renders the whole thing every time the value changes.  The react implementation (via the key prop) and the angular implementation (via the track by function) ensure that only the changed nodes are added or updated.
+
 ## Resources
 
 * https://developer.mozilla.org/en-US/
