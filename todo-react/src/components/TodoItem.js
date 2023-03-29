@@ -1,10 +1,11 @@
-function TodoItem({ todo }) {
+function TodoItem({ todo, setStatus }) {
   return (
     <li className="todo-item">
       <input
         checked={todo.done}
         type="checkbox"
         className="todo-item--checkbox"
+        onChange={() => setStatus(todo.id, !todo.done)}
       />
       <p
         className={`todo-item--text ${
