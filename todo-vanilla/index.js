@@ -46,15 +46,34 @@ function createTodo(todo) {
 function renderTodos() {
   const list = getTodoList();
 
-  for (let node of list.childNodes) {
-    list.removeChild(node);
+  while (list.firstChild) {
+    list.removeChild(list.lastChild);
   }
 
   list.append(...todos.map(createTodo));
 }
 
+function initTodoForm() {
+  document.querySelector("#todo-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const data = new FormData(event.target);
+    const description = data.get("description");
+
+    todos.push({
+      id: crypto.randomUUID(),
+      description,
+      done: false,
+    });
+
+    renderTodos();
+    event.target.value = "";
+  });
+}
+
 function main() {
   renderTodos();
+  initTodoForm();
 }
 
 document.addEventListener("DOMContentLoaded", () => main());
