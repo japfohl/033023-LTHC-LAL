@@ -1,50 +1,11 @@
 import TodoList from "./components/TodoList";
-import { useMemo, useState } from "react";
 import TodoForm from "./components/TodoForm";
 import ViewToggle from "./components/ViewToggle";
+import { useTodos } from "./hooks/useTodos";
 
 function App() {
-  const [todos, setTodos] = useState([
-    {
-      id: crypto.randomUUID(),
-      description: "Active item",
-      done: false,
-    },
-    {
-      id: crypto.randomUUID(),
-      description: "Completed item",
-      done: true,
-    },
-  ]);
-
-  const [view, setView] = useState("all");
-
-  const filteredTodos = useMemo(
-    () =>
-      todos.filter((t) => {
-        return (
-          view === "all" ||
-          (view === "active" && !t.done) ||
-          (view === "completed" && t.done)
-        );
-      }),
-    [view, todos]
-  );
-
-  const addTodo = (description) =>
-    setTodos([
-      ...todos,
-      {
-        id: crypto.randomUUID(),
-        description,
-        done: false,
-      },
-    ]);
-
-  const setTodoStatus = (id, done) =>
-    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, done } : todo)));
-
-  const deleteTodo = (id) => setTodos(todos.filter((t) => t.id !== id));
+  const { todos, view, addTodo, setTodoStatus, deleteTodo, setView } =
+    useTodos();
 
   return (
     <>
@@ -55,7 +16,7 @@ function App() {
       <main className="container">
         <TodoForm onSave={addTodo} />
         <TodoList
-          todos={filteredTodos}
+          todos={todos}
           setStatus={setTodoStatus}
           deleteTodo={deleteTodo}
         />
