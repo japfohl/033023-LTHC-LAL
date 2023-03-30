@@ -11,6 +11,8 @@ let todos = [
   },
 ];
 
+let view = "all";
+
 function getTodoList() {
   return document.querySelector("#todo-list");
 }
@@ -21,7 +23,7 @@ function toggleTodo(id, done) {
 }
 
 function deleteTodo(id) {
-  todos = todos.filter(t => t.id !== id);
+  todos = todos.filter((t) => t.id !== id);
   renderTodos();
 }
 
@@ -51,7 +53,7 @@ function createTodo(todo) {
   button.classList.add("contrast", "outline", "todo-item--delete-button");
   button.textContent = "X";
 
-  button.addEventListener('click', () => deleteTodo(todo.id));
+  button.addEventListener("click", () => deleteTodo(todo.id));
 
   li.append(input, p, button);
 
@@ -65,7 +67,17 @@ function renderTodos() {
     list.removeChild(list.lastChild);
   }
 
-  list.append(...todos.map(createTodo));
+  list.append(
+    ...todos
+      .filter((t) => {
+        return (
+          view === "all" ||
+          (view === "active" && !t.done) ||
+          (view === "completed" && t.done)
+        );
+      })
+      .map(createTodo)
+  );
 }
 
 function initTodoForm() {
@@ -81,14 +93,44 @@ function initTodoForm() {
       done: false,
     });
 
-    document.querySelector('#todoInput').value = '';
+    document.querySelector("#todoInput").value = "";
     renderTodos();
   });
+}
+
+function setButtonState() {
+  const names = ["all", "active", "completed"];
+
+  for (let name of names) {
+    document.querySelector(`#${name}-toggle`).classList =
+      view === name ? "primary" : "secondary outline";
+  }
+}
+
+function setTodoListView(viewName) {
+  view = viewName;
+  renderTodos();
+  setButtonState();
+}
+
+function initViewToggles() {
+  document
+    .querySelector("#all-toggle")
+    .addEventListener("click", () => setTodoListView("all"));
+
+  document
+    .querySelector("#active-toggle")
+    .addEventListener("click", () => setTodoListView("active"));
+
+  document
+    .querySelector("#completed-toggle")
+    .addEventListener("click", () => setTodoListView("completed"));
 }
 
 function main() {
   renderTodos();
   initTodoForm();
+  initViewToggles();
 }
 
 document.addEventListener("DOMContentLoaded", () => main());
