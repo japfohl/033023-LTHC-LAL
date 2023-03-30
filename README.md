@@ -148,6 +148,10 @@ Again, this results in similar performance issues as the list size grows.
 
 ### `step-4` - Delete Todo
 
+The Angular and React implementations of the delete functionality are almost identical to that of the "Toggle Todo" feature as well. The Angular implementation is to pass events up the component heirarchy and handle them in the service.  The React implementaiton is to pass a function down the tree where it is called by the todo item component.
+
+The vanilla implementation is also nearly identical to the implementation of the toggle functionality found in step 3. Another event listener is attached to the delete button and when clicked, the todo is removed from the list and the whole thing is rerendered.
+
 ### `step-5` - Toggle Todo View
 
 ## Resources
