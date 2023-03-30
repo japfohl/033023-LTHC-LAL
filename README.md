@@ -167,6 +167,39 @@ Again, this results in similar performance issues as the list size grows.
 
 ### `step-5` - Toggle Todo View
 
+#### Angular
+
+**`TodoService`**
+- Added the `setViewType` method to `TodoService` and a public readonly property `viewType` to enable consumers to get the current view type.
+- The `TodoService` now returns a filtered list of `Todo`s in the `todos()` getter.
+
+**`ViewTogglerComponent`**
+- Added a new component to encapsulate view selection.  The component renders an array of data containing the a `TodoViewType` and the label to display on the button. Each of the buttons has classes dynamicall set based on the `viewType` `@Input()` property.
+- When one of the buttons is clicked, the component emits the `viewTypeChange` event which can be consumed by the parent component.
+
+**`AppComponent`**
+- Swap out static buttons for `app-view-toggler` component.
+- Pass the current `viewType` from the `TodoService`.
+- Intercepts the `viewTypeChange` event and calls the `setViewType` method in the service.
+
+#### React
+
+**`<ViewToggle />`**
+- The `ViewToggle` component accepts the current view and a `setView` callback.
+- The buttons are rendered and their class is set based on which view is currently active using the `calculateClass` local function.
+- Any time one of the buttons is clicked, the `setView` function is called.
+
+**`<App />`**
+- Renders the `ViewToggle` component instead of the static buttons list, passing in the current view and a `setView` function.
+- The current view and setter function are created using a `useState` hook.
+- The filtered list of todos is created using the `useMemo` hook.  This hook takes a calculation function as its first argument and its dependencies as the second argument.  Any time one of the dependencies changes, the function will be called.  If they don't change, the memoized value is used.  This function produces a filtered list of todos from the original list and the current view.
+
+#### Vanilla
+
+- We start by storing a global variable with the current view.
+- We update our render function to filter the list of Todos (this produces a new array and does not modify the original one) before rendering it on the screen.
+- Event handlers are set up for each of the buttons in the `initViewToggles` function.  That function calls the `setTotoListView` function which in turn, updates the global view, re-renders the list, and then calls the `setButtonState` function which is responsible for updating the classes of the buttons based on the global view.
+
 ## Resources
 
 * https://developer.mozilla.org/en-US/
