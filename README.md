@@ -31,6 +31,16 @@ The L&L will be broken down into 2 sections.
 
 As we dive into implementing the app, we'll work in a series of Git branches that will build on each other, starting with the branch `step-0`.  After each step is complete, we'll jump to the next step (`step-n`) until the example app is complete.
 
+## What is a Single Page Application (SPA)?
+
+- A single page application is a website or web application that dynamically rewrites a current web page with new data from the web server, instead of the default method of a web browser loading entire new pages.
+- SPAs load "once" and then do all the work in the browsers JavaScript virtual machine, leveraging the DOM and Browser APIs.
+- SPAs abstract the traditional DOM and Browser APIs and enable ways of thinking about a page or set of pages using other models.  Some ways of describing this models is using a declarative rendering model.  AKA: declare the shape of the page based on some data and a mix of JS and HTML and then let the framework take care of the actual business of generating and managing the elements on the page.
+- SPAs enable more robust unit level testing of an individual part of a page and _can_ increase developer confidence in how their applicaiton behaves.
+- SPAs enable component based design.  This means a page can be broken down into individual parts and each can be developed in isolation of the others using a well defined API. (see example component breakdown)
+
+**Note:** The example app we're demoing today isn't a perfect example of something that I would use an SPA for.  Typically we'd leverage an SPA for something "larger" with more complex requirements.
+
 ## Example App Requirements
 
 1. App should display a list of TODOs
