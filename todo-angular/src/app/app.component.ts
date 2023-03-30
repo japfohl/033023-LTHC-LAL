@@ -1,13 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { TodoFormComponent } from './components/todo-form.component';
 import { TodoListComponent } from './components/todo-list.component';
+import { ViewTogglerComponent } from './components/view-toggler.component';
 import { TodoChange } from './models/todo.model';
-import { TodoService } from './services/todo.service';
+import { TodoService, TodoViewType } from './services/todo.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [TodoFormComponent, TodoListComponent],
+  imports: [TodoFormComponent, TodoListComponent, ViewTogglerComponent],
   template: `
     <header class="container">
       <h1>SPA Lunch &amp; Learn - 3/30/2023</h1>
@@ -19,11 +20,9 @@ import { TodoService } from './services/todo.service';
         [todos]="todoService.todos"
         (toggleTodo)="handleToggleTodo($event)"
         (deleteTodo)="handleDeleteTodo($event)" />
-      <section class="grid">
-        <button class="primary">All</button>
-        <button class="secondary outline">Active</button>
-        <button class="secondary outline">Completed</button>
-      </section>
+      <app-view-toggler
+        [viewType]="todoService.viewType"
+        (viewTypeChange)="handleChangeViewType($event)" />
     </main>
   `,
 })
@@ -40,5 +39,9 @@ export class AppComponent {
 
   handleDeleteTodo(id: string): void {
     this.todoService.deleteTodo(id);
+  }
+
+  handleChangeViewType(viewType: TodoViewType): void {
+    this.todoService.setViewType(viewType);
   }
 }
