@@ -1,4 +1,4 @@
-function TodoItem({ todo, setStatus }) {
+function TodoItem({ todo, setStatus, deleteTodo }) {
   return (
     <li className="todo-item">
       <input
@@ -14,7 +14,12 @@ function TodoItem({ todo, setStatus }) {
       >
         {todo.description}
       </p>
-      <button className="contrast outline todo-item--delete-button">X</button>
+      <button
+        className="contrast outline todo-item--delete-button"
+        onClick={() => deleteTodo(todo.id)}
+      >
+        X
+      </button>
     </li>
   );
 }

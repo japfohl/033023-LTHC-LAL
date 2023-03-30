@@ -29,6 +29,8 @@ function App() {
   const setTodoStatus = (id, done) =>
     setTodos(todos.map((todo) => (todo.id === id ? { ...todo, done } : todo)));
 
+  const deleteTodo = (id) => setTodos(todos.filter((t) => t.id !== id));
+
   return (
     <>
       <header className="container">
@@ -37,7 +39,11 @@ function App() {
 
       <main className="container">
         <TodoForm onSave={addTodo} />
-        <TodoList todos={todos} setStatus={setTodoStatus} />
+        <TodoList
+          todos={todos}
+          setStatus={setTodoStatus}
+          deleteTodo={deleteTodo}
+        />
         <section className="grid">
           <button className="primary">All</button>
           <button className="secondary outline">Active</button>
