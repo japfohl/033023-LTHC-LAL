@@ -57,7 +57,7 @@ const todo = {
 
 ## Steps
 
-##  `step-0` - Scaffold
+###  `step-0` - Scaffold
 
 In this step we scaffolded the three versions of the app.
 1. Vanilla App - Copied static template and created separate CSS and JS files for styles and behavior.  Add script reference for JS file at bottom of body.
@@ -73,7 +73,7 @@ In this step we scaffolded the three versions of the app.
    - Import html into app component template.
    - Add script reference to Pico to index head tag.
 
-## `step-1` - Display Todo List
+### `step-1` - Display Todo List
 
 To begin with we'll dynamically render a static list of TODOs in each app.
 
@@ -89,11 +89,11 @@ In the vanilla version of the application, we have to fully remove the markup fr
 
 One notable difference about the Angular applicaiton is the use of an injectable service.  The Angular style of doing this is to encapsulate logic wherever possible and so, moving behavior to the `TodoService` makes a great deal of sense.  Under normal circumstances I'd be inclined to leverage some reactive programming techniques but for this demo we'll strive for simplicity and clarity.
 
-## `step-2` - Add Todo
+### `step-2` - Add Todo
 
 This step enables the user to add todos to the list.
 
-### Angular
+#### Angular
 
 1. Created the `app-todo-form` component to encapsulate the logic of the input field and any validation requirements.
    - Internally we're using a `FormControl` class from the `ReactiveFormsModule`.  This allows us to define all the business logic around the validation and behavior at the class level and keeps the template relativesly simple.
@@ -101,7 +101,7 @@ This step enables the user to add todos to the list.
    - In the case that the user doesn't submit, but we still want to show an error message before they press enter, we're relying on the `FormControl`'s invalid (the value doesn't conform to any of the validator functions passed to the control) and dirty (the value has been changed by the user) statuses.
 2. Updated the `app-root` component to handle the `addTodo` event.  The component accepts the emitted description and calls the (newly added) `addTodo` method on the `TodoService`.
 
-### React
+#### React
 
 1. Created `TodoForm` component to encapsulate the logic of the input field and validation requirements.
    - A native html `<form>` is being used to render the view here.  Built in validation attributes (`required`) are used to prevent invalid input.
@@ -110,7 +110,7 @@ This step enables the user to add todos to the list.
    - `useState` is a function that takes an initial state, and returns an array where the first index is the current state value (automatically updated between renders) and the second value is a setter function for that value.
  - In the `App` component, we're passing the `addTodo` function into the `TodoForm`'s `onSave` prop.  That function get's called by the `TodoForm` and internally, take that value, create a new array with the current state value, appending the current result to the end of the array.
 
-### Vanilla
+#### Vanilla
 
 The vanilla implementation is handled by the addition of the `initTodoForm` function in the `js` file.  This function does the following:
 - Stops the normal submit event and extracts the form input value.
@@ -119,6 +119,32 @@ The vanilla implementation is handled by the addition of the `initTodoForm` func
 - resets the input value
 
 A note on performance: One big disadvantage of the vanilla implementation is it is considerable less performant as the size of the list grows.  The vanilla implementation clears the list and re-renders the whole thing every time the value changes.  The react implementation (via the key prop) and the angular implementation (via the track by function) ensure that only the changed nodes are added or updated.
+
+### `step-3` - Toggle Todo
+
+When the user toggles a given todo, that action needs to be captured and synced with the global state (whatever data is backing the current view).  In every case, that data is an array of todos.  Each implementation below addresses this in a different way.
+
+#### Angular
+
+- To begin with we introduced the `TodoChange` type to handle the data requirements around the toggle action.
+- The todo item then added an event emitter named `toggleTodo` that emits the `TodoChange` event.
+- The `TodoListComponent` intercepts that event and emits it's own even`toggleTodo` event to the top level component.
+- The app component handles that event by calling the newly added `setTodoStatus` method on the `TodoService`
+
+#### React
+
+- The react implementation is strikingly similar to the angular one, except that instead of passing the event back up the component chain, we're passing the event handler down the component tree (a phenomenon that is known as "prop drilling");
+- At the top level `App` component, we create a `setTodoStatus` function that updates the state being handled by the `useState` hook.  That callback function is passed into the `TodoList` component which in turn passes it to the `TodoItem` component. 
+- Any time the todo is toggled, the `TodoItem` calls the passed in callback and the state is kept in sync.
+
+#### Vanilla
+
+The vanilla implementaion is rather straightforward.  
+
+- Every time a todo row is created using the `createTodo` function, we're attaching an event handler to the `'change'` event of the checkbox input.  
+- The change event handler calls the `toggleTodo` function which updates the todo in the array and then rerenders the whole list.
+
+Again, this results in similar performance issues as the list size grows.
 
 ## Resources
 
