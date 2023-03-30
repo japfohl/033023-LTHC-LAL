@@ -148,9 +148,22 @@ Again, this results in similar performance issues as the list size grows.
 
 ### `step-4` - Delete Todo
 
-The Angular and React implementations of the delete functionality are almost identical to that of the "Toggle Todo" feature as well. The Angular implementation is to pass events up the component heirarchy and handle them in the service.  The React implementaiton is to pass a function down the tree where it is called by the todo item component.
+#### Angular
 
-The vanilla implementation is also nearly identical to the implementation of the toggle functionality found in step 3. Another event listener is attached to the delete button and when clicked, the todo is removed from the list and the whole thing is rerendered.
+- Added the `deleteTodo` method to `TodoService`
+- Added an event emitter to the `TodoComponent` to emit a `deleteTodo` event when the user clicks the delete button.
+- Updated the `TodoListComponent` to pass the `deleteTodo` event to its parent.
+- Updated the `AppComponent` to call the `TodoService::deleteTodo` method when the `deleteTodo` event is emitted by the todo list component.
+
+#### React
+
+- Updated the `TodoItem` component to accept a callback that gets called when the delte button is clicked.
+- Updated hte `TodoList` component to accept a callback that gets passed to the `TodoItem` component.  This callback handles the deletion of a single todo from the list.
+- Added a callback to the `App` component that sets the todo list to a new list with a single todo filtered out by its ID.  That callback gets passed into the `TodoList` `deleteTodo` prop.
+
+#### Vanilla
+
+- Added a `deleteTodo` funciton that updates the global list by filtering out the matching ID and rerenders the whole TODO list after that update is complete.
 
 ### `step-5` - Toggle Todo View
 
