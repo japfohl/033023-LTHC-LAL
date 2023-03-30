@@ -200,6 +200,23 @@ Again, this results in similar performance issues as the list size grows.
 - We update our render function to filter the list of Todos (this produces a new array and does not modify the original one) before rendering it on the screen.
 - Event handlers are set up for each of the buttons in the `initViewToggles` function.  That function calls the `setTotoListView` function which in turn, updates the global view, re-renders the list, and then calls the `setButtonState` function which is responsible for updating the classes of the buttons based on the global view.
 
+### `bonus-step` - Conform to language patterns
+
+#### Angular
+
+- First step was to refactor the `TodoService`to use RxJs observable streams to handle all interactions.  All user interactions are redefined as an action type that get's processed via a reducer function (using the RxJs `scan` operator). Finally, the current view type and the current todo list are combined to produce a filtered view (`Observer<Todo[]>`).
+- In `AppComponent` I removed all the handlers and simply rendered the form, list, and toggler since they're be directly interacting with the `TodoService`.
+- The `TodoFormComponent` is now directly calling the `TodoService`'s `addTodo` method instead of emitting an event.
+- The `TodoListComponent` now renders the list using the `async` pipe.  Additionally, it directly calls the `setTodoStatus` and `deleteTodo` methods on the service instead of emitting events.  All inputs and outputs are removed.
+- The view toggler now generates the list of buttons based on the current `viewType$` emitted from the todo service.  It also directly calls the `setViewType` method on the `TodoService` to update which Todos show in the list.
+- All component now use `OnPush` based change detection which minimizes rerenders across the whole application and increases overall performance.
+
+#### React
+
+- Created a custom react hook called `useTodos`.  This hook moves all of the logic that existed in the react component and exports it as a clean interface with two values.  The todos themselves, the view, and the functions for updating those.
+- The `App` component now directly uses the newly created hook instead of initializing and managing the functions internally.
+- This enables cleaner separation of concerns and makes this hook reusable elsewhere.  Adding cusom hooks like this makes testing the components significantly easier. 
+
 ## Resources
 
 * https://developer.mozilla.org/en-US/
