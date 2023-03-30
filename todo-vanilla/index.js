@@ -20,6 +20,11 @@ function toggleTodo(id, done) {
   renderTodos();
 }
 
+function deleteTodo(id) {
+  todos = todos.filter(t => t.id !== id);
+  renderTodos();
+}
+
 function createTodo(todo) {
   // create the base list element
   const li = document.createElement("li");
@@ -45,6 +50,8 @@ function createTodo(todo) {
   const button = document.createElement("button");
   button.classList.add("contrast", "outline", "todo-item--delete-button");
   button.textContent = "X";
+
+  button.addEventListener('click', () => deleteTodo(todo.id));
 
   li.append(input, p, button);
 
