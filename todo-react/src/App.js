@@ -1,6 +1,7 @@
 import TodoList from "./components/TodoList";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import TodoForm from "./components/TodoForm";
+import ViewToggle from "./components/ViewToggle";
 
 function App() {
   const [todos, setTodos] = useState([
@@ -15,6 +16,20 @@ function App() {
       done: true,
     },
   ]);
+
+  const [view, setView] = useState("all");
+
+  const filteredTodos = useMemo(
+    () =>
+      todos.filter((t) => {
+        return (
+          view === "all" ||
+          (view === "active" && !t.done) ||
+          (view === "completed" && t.done)
+        );
+      }),
+    [view, todos]
+  );
 
   const addTodo = (description) =>
     setTodos([
@@ -40,15 +55,11 @@ function App() {
       <main className="container">
         <TodoForm onSave={addTodo} />
         <TodoList
-          todos={todos}
+          todos={filteredTodos}
           setStatus={setTodoStatus}
           deleteTodo={deleteTodo}
         />
-        <section className="grid">
-          <button className="primary">All</button>
-          <button className="secondary outline">Active</button>
-          <button className="secondary outline">Completed</button>
-        </section>
+        <ViewToggle view={view} setView={setView} />
       </main>
     </>
   );
