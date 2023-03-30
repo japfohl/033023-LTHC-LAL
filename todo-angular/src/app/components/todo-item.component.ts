@@ -21,7 +21,12 @@ import { Todo, TodoChange } from '../models/todo.model';
         >
           {{ todo.description }}
         </p>
-        <button class="contrast outline todo-item--delete-button">X</button>
+        <button
+          class="contrast outline todo-item--delete-button"
+          (click)="deleteTodo.emit(todo.id)"
+        >
+          X
+        </button>
       </li>
     </ng-container>
   `,
@@ -30,4 +35,5 @@ export class TodoComponent {
   @Input() todo?: Todo;
 
   @Output() toggleTodo = new EventEmitter<TodoChange>();
+  @Output() deleteTodo = new EventEmitter<string>();
 }

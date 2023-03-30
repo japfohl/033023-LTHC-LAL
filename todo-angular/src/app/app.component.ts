@@ -15,7 +15,10 @@ import { TodoService } from './services/todo.service';
 
     <main class="container">
       <app-todo-form (addTodo)="addTodo($event)" />
-      <app-todo-list [todos]="todoService.todos" (toggleTodo)="handleToggleTodo($event)"/>
+      <app-todo-list
+        [todos]="todoService.todos"
+        (toggleTodo)="handleToggleTodo($event)"
+        (deleteTodo)="handleDeleteTodo($event)" />
       <section class="grid">
         <button class="primary">All</button>
         <button class="secondary outline">Active</button>
@@ -33,5 +36,9 @@ export class AppComponent {
 
   handleToggleTodo(change: TodoChange) {
     this.todoService.setTodoStatus(change.id, change.done);
+  }
+
+  handleDeleteTodo(id: string): void {
+    this.todoService.deleteTodo(id);
   }
 }

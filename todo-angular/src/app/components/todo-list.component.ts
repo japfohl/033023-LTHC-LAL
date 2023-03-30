@@ -13,7 +13,8 @@ import { TodoComponent } from './todo-item.component';
         <app-todo
           *ngFor="let todo of todos; trackBy: trackTodo"
           [todo]="todo"
-          (toggleTodo)="toggleTodo.emit($event)"/>
+          (toggleTodo)="toggleTodo.emit($event)"
+          (deleteTodo)="deleteTodo.emit($event)" />
       </ul>
     </section>
   `,
@@ -22,6 +23,7 @@ export class TodoListComponent {
   @Input() todos: Todo[] = [];
 
   @Output() toggleTodo = new EventEmitter<TodoChange>();
+  @Output() deleteTodo = new EventEmitter<string>();
 
   trackTodo(_: number, todo: Todo): string {
     return todo.id;

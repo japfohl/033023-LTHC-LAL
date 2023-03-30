@@ -35,6 +35,10 @@ export class TodoService {
     ];
   }
 
+  deleteTodo(id: string): void {
+    this._todos = this._todos.filter(t => t.id !== id);
+  }
+
   setTodoStatus(id: string, done: boolean): void {
     this._todos = this.todos.map((todo) =>
       todo.id === id ? { ...todo, done } : todo

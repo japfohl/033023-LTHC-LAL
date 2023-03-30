@@ -146,6 +146,10 @@ The vanilla implementaion is rather straightforward.
 
 Again, this results in similar performance issues as the list size grows.
 
+### `step-4` - Delete Todo
+
+### `step-5` - Toggle Todo View
+
 ## Resources
 
 * https://developer.mozilla.org/en-US/
