@@ -1,10 +1,18 @@
 import { NgIf } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  Output,
+} from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TodoService } from '../services/todo.service';
 
 @Component({
   selector: 'app-todo-form',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ReactiveFormsModule, NgIf],
   template: `
     <section>
@@ -28,6 +36,8 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
   ],
 })
 export class TodoFormComponent {
+  todoService = inject(TodoService);
+
   descriptionControl = new FormControl('', {
     nonNullable: true,
     validators: [Validators.required],
@@ -37,12 +47,10 @@ export class TodoFormComponent {
     return this.descriptionControl.invalid && this.descriptionControl.dirty;
   }
 
-  @Output() addTodo = new EventEmitter<string>();
-
   onSubmit(event: Event): void {
     event.preventDefault();
     if (this.descriptionControl.valid) {
-      this.addTodo.emit(this.descriptionControl.value);
+      this.todoService.addTodo(this.descriptionControl.value);
       this.descriptionControl.reset();
     } else {
       this.descriptionControl.markAsDirty();

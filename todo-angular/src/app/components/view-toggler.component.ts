@@ -1,19 +1,47 @@
-import { NgClass, NgFor } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TodoViewType } from '../services/todo.service';
+import { AsyncPipe, NgClass, NgFor } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+} from '@angular/core';
+import { map, Observable } from 'rxjs';
+import { TodoService, TodoView } from '../services/todo.service';
+
+interface ToggleButton {
+  label: string;
+  viewType: TodoView;
+  class: string;
+}
+
+const defaultButtons: Pick<ToggleButton, 'label' | 'viewType'>[] = [
+  {
+    label: 'All',
+    viewType: 'all',
+  },
+  {
+    label: 'Active',
+    viewType: 'active',
+  },
+  {
+    label: 'Completed',
+    viewType: 'completed',
+  },
+];
 
 @Component({
   selector: 'app-view-toggler',
   standalone: true,
-  imports: [NgFor, NgClass],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgFor, AsyncPipe],
   template: `
     <section class="grid">
       <button
-        *ngFor="let button of buttons"
-        (click)="handleViewTypeChange(button.viewType)"
-        [ngClass]="
-          viewType === button.viewType ? 'primary' : 'secondary outline'
-        "
+        *ngFor="let button of buttons$ | async"
+        (click)="todoService.setViewType(button.viewType)"
+        [class]="button.class"
       >
         {{ button.label }}
       </button>
@@ -21,26 +49,15 @@ import { TodoViewType } from '../services/todo.service';
   `,
 })
 export class ViewTogglerComponent {
-  @Input() viewType: TodoViewType = 'all';
-  @Output() viewTypeChange = new EventEmitter<TodoViewType>();
+  todoService = inject(TodoService);
 
-  buttons: { label: string; viewType: TodoViewType }[] = [
-    {
-      label: 'All',
-      viewType: 'all',
-    },
-    {
-      label: 'Active',
-      viewType: 'active',
-    },
-    {
-      label: 'Completed',
-      viewType: 'completed',
-    },
-  ];
-
-  handleViewTypeChange(viewType: TodoViewType): void {
-    this.viewType = viewType;
-    this.viewTypeChange.emit(viewType);
-  }
+  buttons$: Observable<ToggleButton[]> = this.todoService.viewtype$.pipe(
+    map((view) =>
+      defaultButtons.map(({ label, viewType }) => ({
+        label,
+        viewType,
+        class: view === viewType ? 'primary' : 'secondary outline',
+      }))
+    )
+  );
 }

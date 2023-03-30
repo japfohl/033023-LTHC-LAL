@@ -1,64 +1,112 @@
 import { Injectable } from '@angular/core';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  Observable,
+  scan,
+  startWith,
+  Subject,
+  withLatestFrom,
+} from 'rxjs';
 import { Todo } from '../models/todo.model';
 
-export type TodoViewType = 'all' | 'completed' | 'active';
+export type TodoView = 'all' | 'completed' | 'active';
+
+export enum ACTIONS {
+  add = 1,
+  delete = 2,
+  set = 3,
+}
+
+export interface SetTodoPayload {
+  id: string;
+  done: boolean;
+}
+
+export interface TodoActionPayload {
+  [ACTIONS.add]: string;
+  [ACTIONS.delete]: string;
+  [ACTIONS.set]: SetTodoPayload;
+}
+
+export interface TodoActionWithPayload<T extends ACTIONS> {
+  type: T;
+  payload: TodoActionPayload[T];
+}
+
+export type TodoAction<T extends ACTIONS> = TodoActionWithPayload<T>;
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
-  private _todos: Todo[];
-  private _viewType: TodoViewType = 'all';
+  private _viewType = new BehaviorSubject<TodoView>('all');
+  private _todoActions = new Subject<TodoAction<ACTIONS>>();
 
-  public get todos(): Todo[] {
-    return this._todos.filter(({ done }) => {
-      return this._viewType === 'all' || (
-        this._viewType === 'active' && !done
-      ) || (
-        this._viewType === 'completed' && done
+  public viewtype$ = this._viewType.asObservable();
+  private allTodos$: Observable<Todo[]> = this._todoActions.pipe(
+    scan((todos, action) => {
+      switch (action.type) {
+        case ACTIONS.add:
+          return [
+            ...todos,
+            {
+              id: crypto.randomUUID(),
+              done: false,
+              description: action.payload as string,
+            },
+          ];
+        case ACTIONS.delete:
+          return todos.filter((t) => t.id !== (action.payload as string));
+        case ACTIONS.set:
+          const payload = action.payload as SetTodoPayload;
+          return todos.map((todo) => {
+            return todo.id === payload.id
+              ? {
+                  ...todo,
+                  done: payload.done,
+                }
+              : todo;
+          });
+        default:
+          return todos;
+      }
+    }, [] as Todo[]),
+    startWith([])
+  );
+
+  public todos$ = combineLatest([this.viewtype$, this.allTodos$]).pipe(
+    map(([view, todos]) =>
+      todos.filter(
+        (todo) =>
+          view === 'all' ||
+          (view === 'active' && !todo.done) ||
+          (view === 'completed' && todo.done)
       )
-    })
-  }
-
-  public get viewType(): TodoViewType {
-    return this._viewType;
-  }
-
-  constructor() {
-    this._todos = [
-      {
-        id: crypto.randomUUID(),
-        description: 'Active todo',
-        done: false,
-      },
-      {
-        id: crypto.randomUUID(),
-        description: 'Completed todo',
-        done: true,
-      },
-    ];
-  }
+    )
+  );
 
   addTodo(description: string): void {
-    this._todos = [
-      ...this._todos,
-      {
-        id: crypto.randomUUID(),
-        description,
-        done: false,
-      },
-    ];
+    this._todoActions.next({
+      type: ACTIONS.add,
+      payload: description,
+    });
   }
 
   deleteTodo(id: string): void {
-    this._todos = this._todos.filter(t => t.id !== id);
+    this._todoActions.next({
+      type: ACTIONS.delete,
+      payload: id,
+    });
   }
 
   setTodoStatus(id: string, done: boolean): void {
-    this._todos = this._todos.map((todo) =>
-      todo.id === id ? { ...todo, done } : todo
-    );
+    this._todoActions.next({
+      type: ACTIONS.set,
+      payload: { id, done },
+    });
   }
 
-  setViewType(viewType: TodoViewType): void {
-    this._viewType = viewType;
+  setViewType(viewType: TodoView): void {
+    this._viewType.next(viewType);
   }
 }
